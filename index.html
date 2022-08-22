@@ -1,0 +1,163 @@
+<html>
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+	<title>Cheesy Accent Generator</title>
+	<style>
+
+	</style>
+	</head>
+	<body>
+	<h1>Cheesy Accent Generator</h1>	
+	<div ng-app="myApp" ng-controller="myCtrl" >
+	
+	
+	<textarea ng-model="input"></textarea>
+		Select a topic:
+  <select ng-model="myAccent">
+    <option value="">
+    <option value="french">French
+    <option value="german">German
+    <option value="chinese">Chinese
+    <option value="australia">Australian
+    <option value="pirate">Pirate
+  </select>
+
+
+<div ng-switch="myAccent">
+  <div ng-switch-when="french">
+     <img src = "french.png" alt="french flag">
+  </div>
+  <div ng-switch-when="german">
+     <img src = "german.png" alt="german flag">
+  </div>
+  <div ng-switch-when="chinese">
+     <img src = "chinese.png" alt="chinese flag">
+  </div>
+  <div ng-switch-when="australian">
+     <img src = "australian.png" alt="australian flag">
+  </div>
+  <div ng-switch-when="pirate">
+     <img src = "pirate.png" alt="pirate flag">
+  </div>
+</div>
+
+  <button ng-click={{translate()}}>Generate Accent</button>
+
+  <p>{{result}}</p>
+</div>
+
+<script>
+var app = angular.module('myApp', []);
+
+app.controller('myCtrl', function($scope) {
+$scope.input = "";
+$scope.myAccent = "";
+ $scope.result = "";	
+  //ACCENTS REGEX
+ $scope.german = function(){
+ 	$scope.input = $scope.input.replace(/(th)/g, "z");
+ 	$scope.input = $scope.input.replace(/(Th|TH)/g, "Z");
+
+ 	//note both of these have two versions to preserve casing.
+ 	$scope.input = $scope.input.replace(/(w)/g, "v");
+ 	$scope.input = $scope.input.replace(/(W)/g, "V");
+ 	//interesting question, is there anyone to right code that could switch the ws and vs?  They'd
+ 	//have to fire at the same time.
+
+ 	//replaces er and ar at the end of a word.  
+ 	// $scope.input = $scope.input.replace(/(er|ar)\s/gi, "a");
+ 	//this works except its not limiting itself to replacing ers at the end of a word.  "I am erudite" becomes "I ama audite". WTF!
+ 	$scope.input = $scope.input.replace(/(er|ar)(\s)|(er|ar)$|(er|ar)([.!?,])/g, "a$2$5");
+ 	$scope.input = $scope.input.replace(/(ER|AR)(\s)|(ER|AR)$|(ER|AR)([.!?,])/g, "A$2$5");
+ 	//note I made two versions incase the user wants to write in all caps
+
+ 	//now this one ensures that "Ve are going zere nov" becomes "ve are going zere now".  It
+ 	//says something interesting about linguistics that...meh, nevermind.
+ 	//so if v is 1) at the end of a word, 2) the last character, or 3) followed by punctuation,
+ 	//it changes back to a 'w'.  It even preserves the space and punctation!
+ 	$scope.input = $scope.input.replace(/v(\s)|v$|v([.!?,])/g, "w$1$2");
+ 	$scope.input = $scope.input.replace(/V(\s)|V$|V([.!?,])/g, "W$1$2");
+	
+
+ 	$scope.result = $scope.input;
+ }
+
+  $scope.french = function(){
+  	$scope.input = $scope.input.replace(/(th)/g, "z");
+  	$scope.input = $scope.input.replace(/(Th|TH)/g, "Z");
+
+  	$scope.input = $scope.input.replace(/(r)/g, "l");
+  	$scope.input = $scope.input.replace(/(R)/g, "L");
+
+$scope.result = $scope.input;
+ }
+
+  $scope.chinese = function(){
+  	$scope.input = $scope.input.replace(/(l)/gi, "r");
+  	$scope.input = $scope.input.replace(/(er|ar)\s/gi, "a")
+  	$scope.input = $scope.input.replace(/(th)/gi, "d")
+
+$scope.result = $scope.input;
+ }
+
+
+//   $scope.australian = function(){
+//   	$scope.input = $scope.input.replace(/(ight)/gi, "oight");
+//   	$scope.input = $scope.input.replace(/(ate)/gi, "ite");
+//   	$scope.input = $scope.input.replace(/([\w]ter)/gi, "der");
+//   	$scope.input = $scope.input.replace(/(er|ar)/gi, "a");
+//   	$scope.input = $scope.input.replace(/(^[h]|\sh), "'");
+//  } 
+
+//  $scope.pirate = function(){
+// $scope.input = $scope.input.replace(/(my)/gi, "me");
+
+//  } 
+
+
+ //END ACCENTS REGEX 
+
+//even this document.ready does not work!  WTF!!!!
+
+
+
+ $scope.translate = function(){
+
+ 	//introduced this to prevent problem mentioned below, does not help
+ 	// event.preventDefault();
+ 	
+ 	//clears input, the problem is currently translate fires immediately, even without a click
+ 	// $scope.input = "";
+ 	//I'm commenting this out for now to see how well the actual accents translation work
+
+
+ 	switch($scope.myAccent){
+ 		case "german":
+ 		$scope.german();
+ 		break;
+ 		case "french":
+ 		$scope.french();
+ 		break;
+ 		case "chinese":
+ 		$scope.chinese();
+ 		break;
+ 		case "australian":
+ 		$scope.australian();
+ 		break;
+ 		case "pirate":
+ 		$scope.pirate();
+ 		break;
+ 		default:
+ 		$scope.result = "No accent choosen";
+ 	}
+ }
+
+
+
+
+});
+</script>
+	</body>
+</html>
