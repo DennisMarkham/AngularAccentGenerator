@@ -20,7 +20,7 @@
     <option value="french">French
     <option value="german">German
     <option value="chinese">Chinese
-    <option value="australia">Australian
+    <option value="australian">Australian
     <option value="pirate">Pirate
   </select>
 
@@ -95,26 +95,38 @@ $scope.result = $scope.input;
  }
 
   $scope.chinese = function(){
-  	$scope.input = $scope.input.replace(/(l)/gi, "r");
-  	$scope.input = $scope.input.replace(/(er|ar)\s/gi, "a")
-  	$scope.input = $scope.input.replace(/(th)/gi, "d")
+  	$scope.input = $scope.input.replace(/(l)/g, "r");
+  	$scope.input = $scope.input.replace(/(L)/g, "R");
 
+  	$scope.input = $scope.input.replace(/(er|ar)(\s)|(er|ar)$|(er|ar)([.!?,])/g, "a$2$5");
+ 	$scope.input = $scope.input.replace(/(ER|AR)(\s)|(ER|AR)$|(ER|AR)([.!?,])/g, "A$2$5");
+
+  	$scope.input = $scope.input.replace(/(th)/g, "d");
+  	$scope.input = $scope.input.replace(/(Th|TH)/g, "D");
 $scope.result = $scope.input;
  }
 
 
-//   $scope.australian = function(){
-//   	$scope.input = $scope.input.replace(/(ight)/gi, "oight");
-//   	$scope.input = $scope.input.replace(/(ate)/gi, "ite");
-//   	$scope.input = $scope.input.replace(/([\w]ter)/gi, "der");
-//   	$scope.input = $scope.input.replace(/(er|ar)/gi, "a");
-//   	$scope.input = $scope.input.replace(/(^[h]|\sh), "'");
-//  } 
+  $scope.australian = function(){
+  	$scope.input = $scope.input.replace(/ight/g, "oight");
+  	$scope.input = $scope.input.replace(/IGHT/g, "OIGHT");
 
-//  $scope.pirate = function(){
-// $scope.input = $scope.input.replace(/(my)/gi, "me");
+  	$scope.input = $scope.input.replace(/ate/g, "ite");
+  	$scope.input = $scope.input.replace(/Ate/g, "Ite");
+  	$scope.input = $scope.input.replace(/ATE/g, "ITE");
 
-//  } 
+
+  	$scope.input = $scope.input.replace(/([\w]ter)/gi, "der");
+  	$scope.input = $scope.input.replace(/(er|ar)/gi, "a");
+  	$scope.input = $scope.input.replace(/^([h|H])|\s(h|H)/, "\'");
+
+  	$scope.result = $scope.input;
+ } 
+
+$scope.newyork = function(){
+	//captures 'o' when not in "oo"
+	$scope.input = scope.input.replace(/o([^o])/gi, "au$1");
+}
 
 
  //END ACCENTS REGEX 
